@@ -1,0 +1,146 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+```{r}
+df <- read.csv ('AB_NYC_2019.csv', header = T)
+head(df)
+```
+
+```{r}
+head(df, n=10) # first 10 records
+```
+
+```{r}
+dim(df) # dimension
+```
+
+```{r}
+str(df) # structure
+```
+
+```{r}
+#data refactor
+df$neighbourhood <- as.factor(df$neighbourhood)
+df$neighbourhood_group <- as.factor(df$neighbourhood_group)
+df$room_type <- as.factor(df$room_type)
+df$last_review <- as.factor(df$last_review)
+```
+
+```{r}
+#data reinteger
+df$calculated_host_listings_count <- as.integer(df$calculated_host_listings_count)
+df$availability_365 <- as.integer(df$availability_365)
+```
+
+
+```{r}
+summary (df)
+```
+```{r}
+# check for missing data in the data frame
+is.na(df)
+```
+
+```{r}
+sum (is.na(df))
+```
+
+```{r}
+colSums(sapply(df,is.na))
+```
+
+## Data Exploration
+
+```{r}
+library(DataExplorer)
+library(dplyr)
+```
+
+```{r}
+plot_str(df)
+```
+
+```{r}
+# % of missing values in each variable
+plot_missing(df) 
+```
+
+```{r}
+plot_histogram(df)
+```
+
+```{r}
+plot_density(df)
+```
+
+```{r}
+plot_boxplot(df, 'price')
+```
+
+```{r}
+library (dplyr)
+df <- select (df, -id)
+```
+
+```{r}
+plot_scatterplot(df, 'price')
+```
+
+```{r}
+plot_scatterplot(df,'room_type')
+```
+
+```{r}
+plot_correlation(df,'continuous')
+```
+
+```{r}
+create_report(df)
+```
+
+```{r}
+# change col names to lowercase
+ds <- df
+colnames(ds) <- tolower(colnames(ds))
+print(colnames(ds))
+```
+
+```{r}
+# Histogram
+library(ggplot2)
+ggplot(ds, aes(x = availability_365)) +
+  geom_histogram(fill = "cornflowerblue", 
+                 color = "white") + 
+  labs(title="Availability in a Year",
+       x = "Availability in a Year") + geom_density(fill = "indianred3")
+```
+
+```{r}
+barplot(table(ds$room_type), main="room type Distribution", , col=c("skyblue","red", "lightgreen"))
+```
+
+```{r}
+prop.table(table(df$room_type))
+```
+
+```{r}
+
+```
+
